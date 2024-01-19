@@ -1,23 +1,26 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
+import mongoose from "mongoose";
 import * as cors from "cors";
 import { appConfig } from "./config/appConfig";
 import { AppRoutes } from './routes/app.routes';
-import * as mysqlConnector from '../app/core/utilities/db-connection';
-
+// import * as swaggerUi from "swagger-ui-express";
+// const YAML = require('yamljs');
+// const swaggerDocument = YAML.load('./docs/swagger.yaml');
 
 
 class App {
   public app: express.Application;
   private PORT: any = appConfig.server.port;
+  public mongoUrl= appConfig.database.host;
 
   
 
   constructor() {
     this.app = express();
+    this.mongoSetup();
     console.log("port---------->",this.PORT)
     this.config();
-    mysqlConnector.dataBase();
     this.app.get("/", (req, res) => {
       res.send("Welcome To Rana App");
     });
@@ -29,7 +32,10 @@ class App {
     });
   }
   
-  
+  private mongoSetup(): void {
+    console.log(this.mongoUrl);
+    mongoose.connect(this.mongoUrl);
+}
   async loadAndConfig(){
     this.config();
     const appRoutes = new AppRoutes();

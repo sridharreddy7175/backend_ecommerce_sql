@@ -1,33 +1,48 @@
-const Sequelize = require("sequelize");
-import { Model } from "./Model";
-export class UsersModel extends Model {
-  constructor() {
-    const TABLE_NAME: String = "users";
-    super(
-      TABLE_NAME,
-      {
-        id: {
-          type: Sequelize.INTEGER,
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        role_id: Sequelize.INTEGER,
-        name: Sequelize.STRING,
-        mobile: Sequelize.STRING,
-        email: Sequelize.STRING,
-        password: Sequelize.STRING,
-        createdAt: {
-          type: Sequelize.DATE,
-          field: "created_at",
-          default: Sequelize.DATE,
-        },
-        updatedAt: {
-          type: Sequelize.DATE,
-          field: "updated_at",
-          default: Sequelize.DATE,
-        },
-      },
-      true
-    );
-  }
+
+import { model, Schema, Document } from "mongoose";
+const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema.Types;
+
+interface IUser extends Document {
+  name: string;
+  email: string;
+  password: string;
+  accountType: boolean;
+  phone: string;
+  profileUrl:string;
 }
+
+const userSchema: Schema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
+    accountType: {
+      type: String,
+      required: true,
+      default: "user",
+      enum: ["admin", "user"],
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    profileUrl:{
+      type: String,
+      default: 'https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png'
+  },
+  },
+  { timestamps: true }
+);
+
+export const UserModel = model<IUser>("UserModel", userSchema);

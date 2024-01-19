@@ -1,13 +1,12 @@
 import { responseInterceptor } from "../utilities/response.interceptor";
-import { UsersModel } from "../models/user-model";
+import { UserModel } from "../models/user-model";
 
-export class UserController extends responseInterceptor {
+export class UserController{
   public responseInterceptor: responseInterceptor;
-  userModel:UsersModel;
+  userModel: typeof UserModel;
   constructor() {
-    super();
     this.responseInterceptor = new responseInterceptor();
-    this.userModel=new UsersModel();
+    this.userModel = UserModel;
 
   }
   async createUser(req, res) {
@@ -21,7 +20,7 @@ export class UserController extends responseInterceptor {
 
   async getUsers(req, res) {
     try {
-      console.log("hello");
+    
     } catch (err) {}
   }
 
